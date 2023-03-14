@@ -82,9 +82,23 @@
     const db = firebase.firestore();
     //파이어베이스 기본 문법 데이터 가져오는 
 
-db.collection('product').doc('상품3').set({ 제목 : '변기' })
-  db.collection('product').add()
-  //상품3 자리에 이름없이 생성됨
+$('#send').click(function(){
+  var 저장할거 = {
+    제목 : $('#title').val(),
+    내용 : $('#content').val(),
+    가격 : $('#price').val(),
+    날짜 : new Date(),
+
+}
+  db.collection('product').add(저장할거).then((result)=>{
+    console.log(result);
+    window.location.href = "/index.html"
+    //성공후에 실행할 코드 ~~
+  }).catch((err)=>{
+    console.log(err)
+    //실패후에 실행할 코드
+  })
+})
   </script>
 
 </body>
