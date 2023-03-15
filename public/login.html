@@ -48,13 +48,17 @@
       </nav>
 
       <div class="container mt-3">
-        <input type="text" class="form-control mt-2" id="title" placeholder="title">
-        <textarea class="form-control mt-2" id="content">content</textarea>
-        <input type="text" class="form-control mt-2" id="price" placeholder="price">
-        <input class="form-control mt-2" type="file" id="image">
-        <button class="btn btn-danger mt-3" id="send">올리기</button>
-      </div>
-      
+        <div class="mb-3">
+          <input type="text" class="form-control" placeholder="name" id="name-new">
+        </div>
+        <div class="mb-3">
+          <input type="email" class="form-control" placeholder="email" id="email-new">
+        </div>
+        <div class="mb-3">
+          <input type="password" class="form-control" placeholder="pw" id="pw-new">
+        </div>
+        <button type="submit" class="btn btn-primary" id="register">가입하기</button>
+     </div>
 
 
     <script src="/__/firebase/8.6.5/firebase-app.js"></script>
@@ -83,47 +87,15 @@
     //파이어베이스 기본 문법 데이터 가져오는 
 
     const storage = firebase.storage();
-    //storage 다루는 소환술 이미지 파일 저장
-$('#send').click(function(){
-  var file = document.querySelector('#image').files[0];
-var storageRef = storage.ref();
-var 저장할경로 = storageRef.child('image/' + file.name);
-var 업로드작업 = 저장할경로.put(file)
+    $('#register').click(function(){
+  var email = $('#email-new').val();
+  var pw = $('#pw-new').val();
 
-
-  업로드작업.on( 'state_changed', 
-    // 변화시 동작하는 함수 
-    null, 
-    //에러시 동작하는 함수
-    (error) => {
-      console.error('실패사유는', error);
-    }, 
-    // 성공시 동작하는 함수
-    () => {
-      업로드작업.snapshot.ref.getDownloadURL().then((url) => {
-        console.log('업로드된 경로는', url);
-
-        var 저장할거 = {
-    제목 : $('#title').val(),
-    내용 : $('#content').val(),
-    가격 : $('#price').val(),
-    날짜 : new Date(),
-    이미지:url
-}
-  db.collection('product').add(저장할거).then((result)=>{
-    console.log(result);
-    window.location.href = "/index.html"
-    .collection("product")
-.orderBy("", "desc")
-    //성공후에 실행할 코드 ~~
-  }).catch((err)=>{
-    console.log(err)
-    //실패후에 실행할 코드
+  firebase.auth().createUserWithEmailAndPassword(email, pw).then((result)=>{
+    console.log(result)
+    console.log(result.user)
+    alert('가입완료')
   })
-      });
-    }
-);
-
 })
   </script>
 
